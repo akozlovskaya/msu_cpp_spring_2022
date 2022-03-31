@@ -20,7 +20,6 @@ size_t Allocator::get_free_size()
 }
 
 
-
 /******Allocator methods******/
 
 void Allocator::makeAllocator(size_t maxSize)
