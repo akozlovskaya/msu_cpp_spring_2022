@@ -18,19 +18,19 @@ protected:
 	}
 };
 
+
 TEST_F(TestFoo, test_alloc)
 {
     Allocator my_allocator;
     my_allocator.makeAllocator(10);
     
-    char *a = my_allocator.alloc(5);
-    char *b = my_allocator.alloc(6);
-    char *c = my_allocator.alloc(3);
-    
-    ASSERT_NE(a, nullptr);
-    ASSERT_EQ(b, nullptr);
-    ASSERT_NE(c, nullptr);
+    ASSERT_NE(my_allocator.alloc(5), nullptr);
+    ASSERT_EQ(my_allocator.alloc(6), nullptr);
+    ASSERT_NE(my_allocator.alloc(3), nullptr);
+    my_allocator.reset();
+    ASSERT_NE(my_allocator.alloc(3), my_allocator.alloc(3));
 }
+
 
 TEST_F(TestFoo, test_reset)
 {
@@ -45,25 +45,28 @@ TEST_F(TestFoo, test_reset)
     
     my_allocator.makeAllocator(25);
     my_allocator.reset();
+    
+    ASSERT_NE(my_allocator.alloc(25), nullptr);
+    my_allocator.reset();
 }
 
-//test only for valgrind
-TEST_F(TestFoo, test_make)
+
+TEST_F(TestFoo, test_invalid_arg)
 {
     Allocator my_allocator;
+    ASSERT_ANY_THROW(my_allocator.makeAllocator(0));
+    
     my_allocator.makeAllocator(10);
-    my_allocator.makeAllocator(15);
-    const char *b = my_allocator.alloc(5);
-    b = "abcd";
-    
-    my_allocator.makeAllocator(25);
-    my_allocator.reset();
-    b = my_allocator.alloc(5);
-    b = "abcd";
-    
-    // to avoid -Werror=unused-variable
-    ASSERT_NE(nullptr, b);
+    ASSERT_ANY_THROW(my_allocator.alloc(0));
 }
+
+
+TEST_F(TestFoo, bad_order)
+{
+    Allocator my_allocator;
+    ASSERT_ANY_THROW(my_allocator.alloc(1));
+}
+
 
 int main(int argc, char *argv[])
 {

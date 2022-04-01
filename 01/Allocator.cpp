@@ -24,7 +24,8 @@ size_t Allocator::get_free_size()
 
 void Allocator::makeAllocator(size_t maxSize)
 {
-    if (data != nullptr) delete data;   
+    if (maxSize < 1) throw std::invalid_argument{"makeAllocator"};
+    if (data != nullptr) delete data;    
     data = new char(maxSize);
     offset = data;
     free_size = maxSize;
@@ -34,6 +35,9 @@ void Allocator::makeAllocator(size_t maxSize)
 
 char* Allocator::alloc(size_t size)
 {
+    if (size < 1) throw std::invalid_argument{"alloc"};
+    if (data == nullptr) throw std::logic_error{"alloc: no makeAllocator"};
+    
     if (size > get_free_size()) return nullptr;
     
     free_size -= size;
