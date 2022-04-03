@@ -7,7 +7,7 @@ Allocator::Allocator() : free_size(0), cap(0), data(nullptr), offset(nullptr)
 
 Allocator::~Allocator()
 {
-    if (data != nullptr) delete data;
+    if (data != nullptr) delete[] data;
     data = nullptr;
 }
 
@@ -25,8 +25,8 @@ size_t Allocator::get_free_size()
 void Allocator::makeAllocator(size_t maxSize)
 {
     if (maxSize < 1) throw std::invalid_argument{"makeAllocator"};
-    if (data != nullptr) delete data;    
-    data = new char(maxSize);
+    if (data != nullptr) delete[] data;    
+    data = new char[](maxSize);
     offset = data;
     free_size = maxSize;
     cap = maxSize;

@@ -67,6 +67,55 @@ TEST_F(TestFoo, bad_order)
     ASSERT_ANY_THROW(my_allocator.alloc(1));
 }
 
+// make(1), alloc(1), alloc(1)
+TEST_F(TestFoo, bound_cond)
+{
+    Allocator my_allocator;
+    char *a;
+    my_allocator.makeAllocator(1);
+    
+    a = my_allocator.alloc(1);
+    ASSERT_NE(a, nullptr);
+    
+    ASSERT_NO_THROW(a = my_allocator.alloc(1));
+    ASSERT_EQ(a, nullptr);
+}
+
+// make(50), alloc(20), alloc(30), alloc(1), reset(), alloc(50)
+TEST_F(TestFoo, method_chain)
+{
+    Allocator my_allocator;
+    char *a;
+    
+    my_allocator.makeAllocator(50);
+    
+    a = my_allocator.alloc(20);
+    ASSERT_NE(a, nullptr);
+    
+    a = my_allocator.alloc(30);
+    ASSERT_NE(a, nullptr);
+    
+    ASSERT_NO_THROW(a = my_allocator.alloc(1));
+    ASSERT_EQ(a, nullptr);
+    
+    my_allocator.reset();
+    
+    ASSERT_NO_THROW(a = my_allocator.alloc(50));
+    ASSERT_NE(a, nullptr);
+}
+
+// char* p1 = alloc->alloc(10); char* p2 = alloc->alloc(10); p1 - p2 == ?
+TEST_F(TestFoo, pointers)
+{
+    Allocator *my_allocator = new Allocator();
+    my_allocator->makeAllocator(50);
+    
+    char* p1 = my_allocator->alloc(10);
+    char* p2 = my_allocator->alloc(10);
+    ASSERT_EQ(p2-p1, 10);
+    
+    delete my_allocator;
+}
 
 int main(int argc, char *argv[])
 {
