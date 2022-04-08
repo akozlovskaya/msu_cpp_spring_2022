@@ -9,7 +9,7 @@ void TokenParser::Parse(const std::string &str)
     
     for (auto it=str.begin(); it!=str.end(); ++it) {
         if (isspace(*it)) {
-            if (!token.data.empty()) token_processing(token);
+            token_processing(token);
             continue;
         }
         token.data += *it;
@@ -21,6 +21,7 @@ void TokenParser::Parse(const std::string &str)
 }
 
 void TokenParser::token_processing(struct Token &tok) {
+    if (tok.data.empty()) return;
     if (tok.type == 's') {
         if (StringCallbackFunc != nullptr) StringCallbackFunc(tok, this);
     } else {
