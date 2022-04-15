@@ -1,6 +1,8 @@
 #include "Matrix.hpp"
 
 /******Vector constructor and destructor******/
+Vector::Vector() : columns_num(0), row(0), data(nullptr)
+{}
 
 Vector::Vector(size_t row_, size_t columns_num_)
     : columns_num(columns_num_), row(row_)
@@ -13,10 +15,28 @@ Vector::Vector(size_t row_, size_t columns_num_)
 
 Vector::~Vector()
 {
-    if (data != nullptr) delete []data;
+    if (data != nullptr) {
+        delete []data;
+    }
 }
 
 /******Vector operator******/
+
+Vector&
+Vector::operator=(const Vector &src)
+{
+    if (data == nullptr) {
+        data = new int[src.columns_num];
+    } else if (columns_num != src.columns_num) {
+        delete []data;
+        data = new int[src.columns_num];
+    }
+    row = src.row;
+    columns_num = src.columns_num;
+    memcpy(data, src.data, columns_num * sizeof(data[0]));
+    return *this;
+}
+
 
 int&
 Vector::operator[](size_t column)
@@ -32,14 +52,13 @@ Matrix::Matrix(size_t row_num_, size_t col_num_)
 {
     data = new Vector[row_num_];
     for(size_t i = 0; i < row_num_; ++i) {
-        Vector tmp = Vector(i, col_num_);
-        data[i] = tmp;
+        data[i] = Vector(i, col_num_);
     }
 }
 
 Matrix::~Matrix()
 {
-    delete [] data;
+    if (data != nullptr) delete [] data;
 }
 
 /******Matrix operators******/
@@ -92,7 +111,7 @@ Matrix::operator*=(double coef)
 
 std::ostream& operator<<(std::ostream &out, const Matrix &mtx)
 {
-    out << std::endl;
+    out<< std::endl;
     for (size_t i = 0; i < mtx.row_num; ++i) {
         for (size_t j = 0; j < mtx.col_num; ++j) {
             out << "  " << mtx.data[i][j];

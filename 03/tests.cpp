@@ -49,8 +49,8 @@ TEST_F(TestFoo, test_сompare)
 
 TEST_F(TestFoo, test_mult)
 {
-    Matrix m(5, 3);
-    Matrix m1(5, 3);
+    Matrix m(5, 6);
+    Matrix m1(5, 6);
     
     m[1][2] = 12;
     m[1][3] = 18;
@@ -63,8 +63,8 @@ TEST_F(TestFoo, test_mult)
 
 TEST_F(TestFoo, test_sum)
 {
-    Matrix m(5, 3);
-    Matrix m1(5, 3);
+    Matrix m(4, 5);
+    Matrix m1(4, 5);
     
     m[1][2] = 1;
     m[1][3] = 1;

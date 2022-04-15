@@ -4,7 +4,10 @@ TEST_LIBS=-lgtest_main -lgtest -lpthread
 
 .PHONY: test clean
 
-all: Matrix.o test_bin
+all: main test_bin
+
+main: Matrix.o main.cpp
+	$(CC) $(FLAGS) Matrix.o main.cpp -o main
 
 Matrix.o: Matrix.cpp Matrix.hpp
 	$(CC) $(FLAGS) Matrix.cpp -c

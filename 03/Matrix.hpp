@@ -18,6 +18,7 @@ public:
     Vector();
     Vector(size_t, size_t);
     ~Vector();
+    Vector& operator=(const Vector &);
     int& operator[](size_t);
 };
 
