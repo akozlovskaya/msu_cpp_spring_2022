@@ -3,6 +3,9 @@
 #include <cstddef>
 #include <iostream>
 
+using func_str = void (*)(const std::string &);
+using func_digit = void (*)(uint64_t);
+
 struct Token
 {
 	std::string data;
@@ -12,22 +15,21 @@ struct Token
 class TokenParser
 {
 private:
-    void (*StartCallbackFunc)(const std::string &, TokenParser *) = nullptr;
-    void (*DigitCallbackFunc)(const struct Token &, TokenParser *) = nullptr;
-    void (*StringCallbackFunc)(const struct Token &, TokenParser *) = nullptr;
-    void (*EndCallbackFunc)(const std::string &, TokenParser *) = nullptr;
+    func_str StartCallbackFunc = nullptr;
+    func_str EndCallbackFunc = nullptr;
+    func_digit DigitCallbackFunc = nullptr;
+    func_str StringCallbackFunc = nullptr;
 public:
 
-    unsigned dig_token_num = 0;
-    unsigned str_token_num = 0;
-    
     TokenParser() = default;
 
-    void SetStartCallback(void (*func) (const std::string &, TokenParser *));
-    void SetEndCallback(void (*func) (const std::string &, TokenParser *));
-    void SetStringCallback(void (*func) (const struct Token &, TokenParser *));
-    void SetDigitCallback(void (*func) (const struct Token &, TokenParser *));
+    void SetStartCallback(func_str);
+    void SetEndCallback(func_str);
+    void SetStringCallback(func_str);
+    void SetDigitCallback(func_digit);
     
     void Parse(const std::string &);
     void token_processing(struct Token &);
 };
+
+const std::string MAX = "18446744073709551615";

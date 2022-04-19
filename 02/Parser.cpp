@@ -1,9 +1,8 @@
 #include "Parser.hpp"
-
 void TokenParser::Parse(const std::string &str)
 {
     
-    if (StartCallbackFunc != nullptr) StartCallbackFunc("Start parsing!", this);
+    if (StartCallbackFunc != nullptr) StartCallbackFunc("\nStart parsing!");
     
     struct Token token;
     
@@ -17,36 +16,44 @@ void TokenParser::Parse(const std::string &str)
     }
     token_processing(token);
     
-    if (StartCallbackFunc != nullptr) EndCallbackFunc("Finish parsing!", this);
+    if (EndCallbackFunc != nullptr) EndCallbackFunc("Finish parsing!\n");
 }
 
 void TokenParser::token_processing(struct Token &tok) {
     if (tok.data.empty()) return;
-    if (tok.type == 's') {
-        if (StringCallbackFunc != nullptr) StringCallbackFunc(tok, this);
-    } else {
-        if (DigitCallbackFunc != nullptr) DigitCallbackFunc(tok, this);
+    if (tok.type == 'd') {
+        if (tok.data.size() > MAX.size() ||
+           (tok.data.size() == MAX.size() && tok.data > MAX)) {
+            tok.type = 's';
+        } else if (DigitCallbackFunc != nullptr) {
+            DigitCallbackFunc(atoi(tok.data.c_str()));
+        }
     }
+    
+    if (tok.type == 's') {
+        if (StringCallbackFunc != nullptr) StringCallbackFunc(tok.data);
+    }
+    
     tok.type = 'd';
     tok.data.clear();
 }
 
-void TokenParser::SetDigitCallback(void (*func) (const struct Token &, TokenParser *))
+void TokenParser::SetDigitCallback(func_digit func)
 {
     DigitCallbackFunc = func;
 }
 
-void TokenParser::SetStringCallback(void (*func) (const struct Token &, TokenParser *))
+void TokenParser::SetStringCallback(func_str func)
 {
     StringCallbackFunc = func;
 }
 
-void TokenParser::SetStartCallback(void (*func) (const std::string &, TokenParser *))
+void TokenParser::SetStartCallback(func_str func)
 {
     StartCallbackFunc = func;
 }
 
-void TokenParser::SetEndCallback(void (*func) (const std::string &, TokenParser *))
+void TokenParser::SetEndCallback(func_str func)
 {
     EndCallbackFunc = func;
 }
