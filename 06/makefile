@@ -9,7 +9,7 @@ all: main test_bin
 main: format.o main.cpp
 	$(CC) $(FLAGS) format.o main.cpp -o main
 
-format.o: format.cpp format.hpp
+format.o: format.cpp format.hpp custom_exceptions.hpp
 	$(CC) $(FLAGS) format.cpp -c
 
 test_bin: format.o tests.cpp
