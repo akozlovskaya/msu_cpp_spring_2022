@@ -1,6 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <sstream>
+#include <memory>
 
 #include "BigInt.hpp"
 
@@ -294,6 +295,10 @@ TEST_F(TestFoo, test_operators)
     
     a = a;
     ASSERT_EQ(to_str(a), "-20");
+    
+    a = 524;
+    b = std::move(a);
+    ASSERT_EQ(to_str(b), "524");
 }
 
 int main(int argc, char *argv[])
