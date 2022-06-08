@@ -61,6 +61,18 @@ TEST_F(TestFoo, test_constructor)
     ASSERT_EQ(to_str(g1), "0");
     ASSERT_EQ(to_str(g2), "0");
     ASSERT_EQ(to_str(g2), "0");
+    
+    BigInt new_a(a);
+    ASSERT_EQ(to_str(new_a), "123456789012345678901234567890");
+    ASSERT_EQ(to_str(a), "123456789012345678901234567890");
+
+    BigInt new_g3(g3);
+    ASSERT_EQ(to_str(new_g3), "0");
+    ASSERT_EQ(to_str(g3), "0");
+
+    BigInt new_d(d);
+    ASSERT_EQ(to_str(new_d), "-12345");
+    ASSERT_EQ(to_str(d), "-12345");
 }
 
 TEST_F(TestFoo, test_addition_subtraction)
@@ -264,6 +276,24 @@ TEST_F(TestFoo, test_comparison)
     ASSERT_EQ(c >= d, false);
     ASSERT_EQ(c == d, false);
     ASSERT_EQ(c != d, true);
+}
+
+TEST_F(TestFoo, test_operators)
+{
+    BigInt a("20");
+    BigInt b;
+    b = a;
+    
+    ASSERT_EQ(to_str(b), "20");
+    ASSERT_EQ(to_str(a), "20");
+    
+    a = -20;
+    b = a;
+    ASSERT_EQ(to_str(b), "-20");
+    ASSERT_EQ(to_str(a), "-20");
+    
+    a = a;
+    ASSERT_EQ(to_str(a), "-20");
 }
 
 int main(int argc, char *argv[])
