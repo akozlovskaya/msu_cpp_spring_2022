@@ -114,7 +114,11 @@ TEST_F(TestFoo, test_addition_subtraction)
     ASSERT_EQ(to_str(a + 5), "20");
     ASSERT_EQ(to_str(a - 5), "10");
     ASSERT_EQ(to_str(a - 55), "-40");
-
+    
+    /* интересный случай */
+    a = 999999999;
+    b = 1;
+    ASSERT_EQ(to_str(a + b), "1000000000");
 }
 
 TEST_F(TestFoo, test_multiplication)

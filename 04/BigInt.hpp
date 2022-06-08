@@ -27,10 +27,12 @@ private:
 public:
     BigInt();
     BigInt(const std::string&);
+    BigInt(BigInt&&);
     BigInt(int32_t);
     BigInt(const BigInt &);
     BigInt& operator=(const BigInt &);
     BigInt& operator=(int32_t);
+    BigInt& operator=(BigInt&& );
     ~BigInt();
 
     friend std::ostream& operator<<(std::ostream &, const BigInt &);

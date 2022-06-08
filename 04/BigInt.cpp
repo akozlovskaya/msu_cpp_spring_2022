@@ -24,6 +24,16 @@ BigInt::BigInt(const std::string& str)
     remove_zeros();
 }
 
+BigInt::BigInt(BigInt&& src)
+        : size(src.size), cap(src.cap), negative(src.negative)
+{
+    data = new short[cap];
+    memcpy(data, src.data, size * sizeof(data[0]));
+    if (src.data != nullptr) {
+        delete []src.data;
+    }
+}
+    
 BigInt::BigInt(int32_t num)
 {
     negative = num < 0;
@@ -48,6 +58,7 @@ BigInt::BigInt(const BigInt &src)
 BigInt&
 BigInt::operator=(const BigInt &src)
 {
+    if (this == &src) return *this;
     if (cap) delete []data;
     cap = src.cap;
     size = src.size;
@@ -56,6 +67,24 @@ BigInt::operator=(const BigInt &src)
         data = new short[cap];
         memcpy(data, src.data, size * sizeof(data[0]));
     } else { data = nullptr; }
+    return *this;
+}
+
+BigInt&
+BigInt::operator=(BigInt&& src)
+{
+    if (this == &src) return *this;
+    if (cap) delete []data;
+    cap = src.cap;
+    size = src.size;
+    negative = src.negative;
+    if (cap) {
+        data = new short[cap];
+        memcpy(data, src.data, size * sizeof(data[0]));
+    } else { data = nullptr; }
+    if (src.data != nullptr) {
+        delete []src.data;
+    }
     return *this;
 }
 
